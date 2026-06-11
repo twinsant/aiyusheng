@@ -1,0 +1,132 @@
+page {
+  background-color: #f8f8f8;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.container {
+  padding: 40rpx 30rpx;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.settings-bar {
+  width: 100%;
+  margin-bottom: 24rpx;
+}
+
+.settings-tip {
+  font-size: 28rpx;
+  color: #666;
+  text-align: center;
+  padding: 16rpx;
+  background-color: #fff;
+  border-radius: 8rpx;
+}
+
+.settings-btn {
+  text-align: right;
+  padding: 8rpx 0;
+}
+
+.link {
+  color: #576b95;
+}
+
+.life-table {
+  width: 100%;
+  background-color: #fff;
+  border: 1rpx solid #d9d9d9;
+  border-radius: 4rpx;
+  overflow: hidden;
+}
+
+.table-header {
+  display: flex;
+  background-color: #f2f2f2;
+  border-bottom: 1rpx solid #d9d9d9;
+}
+
+.header-cell {
+  flex: 1;
+  padding: 24rpx 24rpx;
+  font-size: 32rpx;
+  color: #333;
+}
+
+.table-row {
+  display: flex;
+  border-bottom: 1rpx solid #e6e6e6;
+}
+
+.table-row:last-child {
+  border-bottom: none;
+}
+
+.label-cell {
+  flex: 0.5;
+  padding: 28rpx 24rpx;
+  font-size: 32rpx;
+  color: #333;
+}
+
+.value-cell {
+  flex: 1.5;
+  padding: 28rpx 24rpx;
+  font-size: 32rpx;
+  color: #333;
+  text-align: left;
+}
+
+.highlight {
+  font-weight: 600;
+}
+
+.progress-track {
+  position: relative;
+  height: 56rpx;
+  background-color: #f0f0f0;
+  border-radius: 8rpx;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.progress-fill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  background-color: #07c160;
+  border-radius: 8rpx;
+  transition: width 0.3s ease;
+}
+
+.progress-text {
+  position: relative;
+  font-size: 28rpx;
+  color: #333;
+  font-weight: 600;
+}
+
+.footer-text {
+  margin-top: 40rpx;
+  text-align: center;
+  font-size: 30rpx;
+  color: #999;
+}
+
+.author-text {
+  margin-top: 16rpx;
+  padding-bottom: 40rpx;
+  text-align: center;
+  font-size: 26rpx;
+  color: #bbb;
+}
+
+.heart {
+  color: #333;
+}

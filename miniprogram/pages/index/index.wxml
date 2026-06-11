@@ -1,0 +1,33 @@
+<navigation-bar title="生命计算器" back="{{false}}" color="black" background="#FFF"></navigation-bar>
+<view class="container">
+  <view class="settings-bar">
+    <view class="settings-tip" wx:if="{{!hasBirthDate}}">
+      <text>当前显示默认生日，</text>
+      <text class="link" bindtap="goToSettings">点击设置您的生日</text>
+    </view>
+    <view class="settings-btn" wx:if="{{hasBirthDate}}" bindtap="goToSettings">
+      <text class="link">修改生日</text>
+    </view>
+  </view>
+  <view class="life-table">
+    <view class="table-header">
+      <text class="header-cell">项目</text>
+      <text class="header-cell">数值</text>
+    </view>
+    <view class="table-row" wx:for="{{items}}" wx:key="label">
+      <text class="cell label-cell">{{item.label}}</text>
+      <text class="cell value-cell {{item.highlight ? 'highlight' : ''}}">{{item.value}}</text>
+    </view>
+    <view class="table-row">
+      <text class="cell label-cell">比例</text>
+      <view class="value-cell">
+        <view class="progress-track">
+          <view class="progress-fill" style="width: {{ratioPercent}}%"></view>
+          <text class="progress-text">{{ratioText}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+  <view class="footer-text">剩下的时间还想干点什么？</view>
+  <view class="author-text"><text class="heart">♥</text> Made by twinsant</view>
+</view>

@@ -1,0 +1,15 @@
+<navigation-bar title="设置生日" back="{{true}}" color="black" background="#FFF"></navigation-bar>
+<view class="container">
+  <view class="form-card">
+    <view class="form-item">
+      <text class="label">您的生日</text>
+      <picker mode="date" value="{{birthDate}}" start="1900-01-01" end="{{today}}" bindchange="onDateChange">
+        <view class="picker {{birthDate ? '' : 'placeholder'}}">
+          {{birthDate ? birthDate : '请选择日期'}}
+        </view>
+      </picker>
+    </view>
+    <view class="tip">设置生日后，首页将显示您的生命计数器</view>
+    <button class="save-btn" bindtap="saveBirthDate">保存</button>
+  </view>
+</view>
