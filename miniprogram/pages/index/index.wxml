@@ -1,4 +1,4 @@
-<navigation-bar title="生命计算器" back="{{false}}" color="black" background="#FFF"></navigation-bar>
+<navigation-bar title="ai生命计算器" back="{{false}}" color="black" background="#FFF"></navigation-bar>
 <view class="container">
   <view class="settings-bar">
     <view class="settings-tip" wx:if="{{!hasBirthDate}}">
@@ -21,7 +21,7 @@
     <view class="table-row">
       <text class="cell label-cell">比例</text>
       <view class="value-cell">
-        <view class="progress-track">
+        <view class="progress-track {{exceeded ? 'exceeded' : ''}}">
           <view class="progress-fill" style="width: {{ratioPercent}}%"></view>
           <text class="progress-text">{{ratioText}}</text>
         </view>
@@ -29,5 +29,5 @@
     </view>
   </view>
   <view class="footer-text">剩下的时间还想干点什么？</view>
-  <view class="author-text"><text class="heart">♥</text> Made by twinsant</view>
+  <view class="author-text"><text class="heart"></text> Made by twinsant</view>
 </view>

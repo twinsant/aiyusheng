@@ -27,6 +27,7 @@ Component({
     hasBirthDate: false,
     ratioPercent: 0,
     ratioText: '',
+    exceeded: false,
   },
   lifetimes: {
     attached() {
@@ -51,11 +52,22 @@ Component({
       const livedDays = daysBetween(birth, today)
       const livedYears = livedDays / 365.25
       const ratio = (livedDays / LIFE_EXPECTANCY_DAYS) * 100
-      const remainingDays = LIFE_EXPECTANCY_DAYS - livedDays
-      const remainingYears = remainingDays / 365.25
+      const exceeded = livedDays > LIFE_EXPECTANCY_DAYS
+
+      let extraItem: { label: string; value: string; highlight: boolean }
+      if (exceeded) {
+        const extraDays = livedDays - LIFE_EXPECTANCY_DAYS
+        const extraYears = extraDays / 365.25
+        extraItem = { label: '已赚', value: `约 ${formatNumber(Math.round(extraDays))} 天（${extraYears.toFixed(1)} 年）🎉`, highlight: true }
+      } else {
+        const remainingDays = LIFE_EXPECTANCY_DAYS - livedDays
+        const remainingYears = remainingDays / 365.25
+        extraItem = { label: '剩余', value: `约 ${formatNumber(Math.round(remainingDays))} 天（${remainingYears.toFixed(1)} 年）`, highlight: false }
+      }
 
       this.setData({
         hasBirthDate,
+        exceeded,
         ratioPercent: Math.min(ratio, 100),
         ratioText: `${ratio.toFixed(2)}%`,
         items: [
@@ -63,7 +75,7 @@ Component({
           { label: '今天', value: todayStr, highlight: false },
           { label: '已活', value: `${formatNumber(livedDays)} 天（${livedYears.toFixed(2)} 年）`, highlight: true },
           { label: '人均预期', value: `${LIFE_EXPECTANCY_YEARS} 年（${formatNumber(LIFE_EXPECTANCY_DAYS)} 天）`, highlight: false },
-          { label: '剩余', value: `约 ${formatNumber(Math.round(remainingDays))} 天（${remainingYears.toFixed(1)} 年）`, highlight: false },
+          extraItem,
         ],
       })
     },
