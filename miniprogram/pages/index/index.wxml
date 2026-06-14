@@ -30,4 +30,6 @@
   </view>
   <view class="footer-text">剩下的时间还想干点什么？</view>
   <view class="author-text"><text class="heart"></text> Made by twinsant</view>
+  <button class="share-btn" bindtap="onShareImage">保存图片分享</button>
+  <canvas type="2d" id="shareCanvas" class="share-canvas"></canvas>
 </view>
