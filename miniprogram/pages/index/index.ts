@@ -99,7 +99,7 @@ Component({
     },
     onShareImage() {
       try {
-        wx.showLoading({ title: '生成图片中...' })
+        wx.showLoading({ title: '\u751F\u6210\u56FE\u7247\u4E2D...' })
         const query = this.createSelectorQuery()
         query.select('#shareCanvas')
           .fields({ node: true, size: true })
@@ -110,18 +110,20 @@ Component({
             const dpr = wx.getSystemInfoSync().pixelRatio
 
             const W = 750
-            const items = this.data.items.filter(i => i.label !== '出生')
-            let totalH = 120 + 10 + 55 + 20 + items.length * 75 + 90
+            // 先计算总高度
+            const items = this.data.items.filter((i) => i.label !== '\u51FA\u751F')
+            let totalH = 100 + 10 + 55 + 20 + items.length * 80 + 80 + 100
 
             canvas.width = W * dpr
             canvas.height = totalH * dpr
             ctx.scale(dpr, dpr)
 
-            // 背景
+            // 白色背景
             ctx.fillStyle = '#ffffff'
             ctx.fillRect(0, 0, W, totalH)
 
-            let y = 80
+            let y = 70
+
             // 标题
             ctx.fillStyle = '#333333'
             ctx.font = 'bold 36px sans-serif'
@@ -129,18 +131,18 @@ Component({
             ctx.fillText('\u2665 \u751F\u547D\u8BA1\u7B97\u5668', W / 2, y)
 
             // 分隔线
-            y += 25
-            ctx.strokeStyle = '#eeeeee'
-            ctx.lineWidth = 1
+            y += 30
+            ctx.strokeStyle = '#e8e8e8'
+            ctx.lineWidth = 2
             ctx.beginPath()
             ctx.moveTo(40, y)
             ctx.lineTo(W - 40, y)
             ctx.stroke()
 
-            // 表头
-            y += 40
+            // 表头背景
+            y += 45
             ctx.fillStyle = '#f5f5f5'
-            ctx.fillRect(30, y - 22, W - 60, 45)
+            ctx.fillRect(30, y - 22, W - 60, 46)
             ctx.fillStyle = '#888888'
             ctx.font = '26px sans-serif'
             ctx.textAlign = 'left'
@@ -150,45 +152,73 @@ Component({
 
             // 数据行
             for (const item of items) {
-              y += 58
+              y += 62
+              // 行分隔线
               ctx.strokeStyle = '#eeeeee'
               ctx.lineWidth = 1
               ctx.beginPath()
-              ctx.moveTo(30, y - 28)
-              ctx.lineTo(W - 30, y - 28)
+              ctx.moveTo(30, y - 30)
+              ctx.lineTo(W - 30, y - 30)
               ctx.stroke()
 
+              // 标签
               ctx.fillStyle = item.highlight ? '#222222' : '#444444'
               ctx.font = item.highlight ? 'bold 28px sans-serif' : '28px sans-serif'
               ctx.textAlign = 'left'
-              ctx.fillText(item.label, 60, y + 6)
+              ctx.fillText(item.label, 60, y + 8)
 
-              if (item.label === '\u6BD4\u4F8B') {
-                // 进度条
-                y += 38
-                const barX = 180
-                const barW = W - 240
-                const barH = 34
-                ctx.fillStyle = '#f0f0f0'
-                roundRect(ctx, barX, y - barW, barH, barW, 6)
-                const fillW = Math.min(this.data.ratioPercent, 100) / 100 * barW
-                if (fillW > 0) {
-                  ctx.fillStyle = this.data.exceeded ? '#d4a017' : '#07c160'
-                  roundRect(ctx, barX, y - barW, barH, fillW, 6)
-                }
-                ctx.fillStyle = '#333333'
-                ctx.font = 'bold 24px sans-serif'
-                ctx.textAlign = 'center'
-                ctx.fillText(this.data.ratioText, barX + barH / 2, y - barW / 2 + 9)
-              } else {
-                ctx.textAlign = 'right'
-                ctx.font = item.highlight ? 'bold 28px sans-serif' : '28px sans-serif'
-                ctx.fillText(item.value, W - 60, y + 6)
-              }
+              // 普通数值
+              ctx.textAlign = 'right'
+              ctx.font = item.highlight ? 'bold 28px sans-serif' : '28px sans-serif'
+              ctx.fillText(item.value, W - 60, y + 8)
             }
 
+            // 进度条行（比例）—— 单独绘制，与 WXML 中独立行结构一致
+            y += 62
+            // 行分隔线
+            ctx.strokeStyle = '#eeeeee'
+            ctx.lineWidth = 1
+            ctx.beginPath()
+            ctx.moveTo(30, y - 30)
+            ctx.lineTo(W - 30, y - 30)
+            ctx.stroke()
+
+            // 标签（middle 基线，与进度条中心对齐）
+            ctx.fillStyle = '#444444'
+            ctx.font = '28px sans-serif'
+            ctx.textAlign = 'left'
+            ctx.textBaseline = 'middle'
+            ctx.fillText('比例', 60, y)
+            ctx.textBaseline = 'alphabetic'
+
+            // 进度条（与"比例"标签垂直居中对齐，水平位于 value-cell 区域内）
+            const barX = 230
+            const barH = 36
+            const barY = y - barH / 2
+            const barW = W - 60 - barX  // 右边界与数值行右对齐(x=W-60=690)一致
+
+            // 进度条背景
+            ctx.fillStyle = '#f0f0f0'
+            ctx.fillRect(barX, barY, barW, barH)
+
+            // 进度条填充
+            const pct = Math.min(this.data.ratioPercent, 100)
+            if (pct > 0) {
+              const fillW = Math.round(pct / 100 * barW)
+              ctx.fillStyle = this.data.exceeded ? '#d4a017' : '#07c160'
+              ctx.fillRect(barX, barY, fillW, barH)
+            }
+
+            // 百分比文字居中（使用 middle 基线精确居中于进度条）
+            ctx.fillStyle = '#333333'
+            ctx.font = 'bold 24px sans-serif'
+            ctx.textAlign = 'center'
+            ctx.textBaseline = 'middle'
+            ctx.fillText(this.data.ratioText, barX + barW / 2, barY + barH / 2)
+            ctx.textBaseline = 'alphabetic'
+
             // 底部文字
-            y += 80
+            y += 90
             ctx.fillStyle = '#999999'
             ctx.font = '26px sans-serif'
             ctx.textAlign = 'center'
@@ -199,6 +229,7 @@ Component({
             ctx.font = '22px sans-serif'
             ctx.fillText('\u2665 Made by twinsant', W / 2, y)
 
+            // 导出图片
             setTimeout(() => {
               wx.canvasToTempFilePath({
                 canvas: canvas as any,
@@ -212,7 +243,7 @@ Component({
                 },
                 fail: () => { wx.hideLoading(); wx.showToast({ title: '\u751F\u6210\u5931\u8D25', icon: 'none' }) },
               }, this)
-            }, 200)
+            }, 300)
           })
       } catch (_e) {
         wx.hideLoading()

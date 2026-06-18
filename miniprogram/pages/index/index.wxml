@@ -1,4 +1,4 @@
-<navigation-bar title="ai生命计算器" back="{{false}}" color="black" background="#FFF"></navigation-bar>
+<navigation-bar title="ai余生" back="{{false}}" color="black" background="#FFF"></navigation-bar>
 <view class="container">
   <view class="settings-bar">
     <view class="settings-tip" wx:if="{{!hasBirthDate}}">
@@ -31,5 +31,5 @@
   <view class="footer-text">剩下的时间还想干点什么？</view>
   <view class="author-text"><text class="heart"></text> Made by twinsant</view>
   <button class="share-btn" bindtap="onShareImage">保存图片分享</button>
-  <canvas type="2d" id="shareCanvas" class="share-canvas"></canvas>
+  <canvas type="2d" id="shareCanvas" class="share-canvas" style="width:750rpx;height:1200rpx"></canvas>
 </view>
