@@ -1,4 +1,4 @@
-<navigation-bar title="ai生命计算器" back="{{false}}" color="black" background="#FFF"></navigation-bar>
+<navigation-bar title="我的yu生" back="{{false}}" color="black" background="#FFF"></navigation-bar>
 <view class="container">
   <view class="settings-bar">
     <view class="settings-tip" wx:if="{{!hasBirthDate}}">
