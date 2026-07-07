@@ -22,6 +22,11 @@ function formatDateCN(dateStr: string): string {
   return `${year}年${month}月${day}日`
 }
 
+function todayCN(): string {
+  const t = new Date()
+  return formatDateCN(`${t.getFullYear()}-${t.getMonth() + 1}-${t.getDate()}`)
+}
+
 function roundRect(ctx: WechatMiniprogram.CanvasRenderingContext2D, x: number, y: number, w: number, h: number, r: number) {
   ctx.beginPath()
   ctx.moveTo(x + r, y)
@@ -42,6 +47,7 @@ Component({
     items: [] as { label: string; value: string; highlight: boolean }[],
     hasBirthDate: false,
     wish: '',
+    wishDate: '',
     ratioPercent: 0,
     ratioText: '',
     exceeded: false,
@@ -61,7 +67,15 @@ Component({
       const saved = wx.getStorageSync(BIRTH_DATE_KEY)
       const birthDate = saved || DEFAULT_BIRTH_DATE
       const hasBirthDate = !!saved
-      const wish = wx.getStorageSync(WISH_KEY) || ''
+      const rawWish = wx.getStorageSync(WISH_KEY)
+      let wish = ''
+      let wishDate = ''
+      if (typeof rawWish === 'string') {
+        wish = rawWish
+      } else if (rawWish) {
+        wish = rawWish.text || ''
+        wishDate = rawWish.date || ''
+      }
 
       const birth = parseDate(birthDate)
       const today = new Date()
@@ -86,6 +100,7 @@ Component({
       this.setData({
         hasBirthDate,
         wish,
+        wishDate,
         exceeded,
         ratioPercent: Math.min(ratio, 100),
         ratioText: `${ratio.toFixed(2)}%`,
@@ -110,8 +125,9 @@ Component({
         success: (res) => {
           if (!res.confirm) return
           const wish = (res.content || '').trim()
-          wx.setStorageSync(WISH_KEY, wish)
-          this.setData({ wish })
+          const wishDate = wish ? todayCN() : ''
+          wx.setStorageSync(WISH_KEY, { text: wish, date: wishDate })
+          this.setData({ wish, wishDate })
         },
       })
     },
@@ -247,7 +263,8 @@ Component({
               y += 44
               ctx.fillStyle = '#576b95'
               ctx.font = '28px sans-serif'
-              ctx.fillText(this.data.wish, W / 2, y)
+              const wishLabel = this.data.wishDate ? `自 ${this.data.wishDate} 起：${this.data.wish}` : this.data.wish
+              ctx.fillText(wishLabel, W / 2, y)
             }
 
             y += 42
