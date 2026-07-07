@@ -28,7 +28,14 @@
       </view>
     </view>
   </view>
-  <view class="footer-text">剩下的时间还想干点什么？</view>
+  <view class="footer-text">
+    <text wx:if="{{!wish}}" class="link" bindtap="onEditWish">剩下的时间还想干点什么？</text>
+    <block wx:else>
+      <text class="heart">5 年♥愿</text>
+      <text class="wish-text">{{wish}}</text>
+      <text class="link" bindtap="onEditWish">（修改）</text>
+    </block>
+  </view>
   <view class="author-text"><text class="heart"></text> Made by twinsant</view>
   <button class="share-btn" bindtap="onShareImage">保存图片分享</button>
   <canvas type="2d" id="shareCanvas" class="share-canvas" style="width:750rpx;height:1200rpx"></canvas>

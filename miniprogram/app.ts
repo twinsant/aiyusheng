@@ -1,4 +1,6 @@
 // app.ts
+// 接下来 5 年想完成一件心心念的一直没做的事情，AI 会帮你分解每天做些
+// 什么，每天提醒你前进一步
 App<IAppOption>({
   globalData: {},
   onLaunch() {

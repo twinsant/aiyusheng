@@ -1,5 +1,6 @@
 const BIRTH_DATE_KEY = 'birth_date'
-const DEFAULT_BIRTH_DATE = '1979-05-28'
+const WISH_KEY = 'life_wish'
+const DEFAULT_BIRTH_DATE = '1970-01-01'
 const LIFE_EXPECTANCY_DAYS = 28709
 const LIFE_EXPECTANCY_YEARS = 78.6
 
@@ -40,6 +41,7 @@ Component({
   data: {
     items: [] as { label: string; value: string; highlight: boolean }[],
     hasBirthDate: false,
+    wish: '',
     ratioPercent: 0,
     ratioText: '',
     exceeded: false,
@@ -59,6 +61,7 @@ Component({
       const saved = wx.getStorageSync(BIRTH_DATE_KEY)
       const birthDate = saved || DEFAULT_BIRTH_DATE
       const hasBirthDate = !!saved
+      const wish = wx.getStorageSync(WISH_KEY) || ''
 
       const birth = parseDate(birthDate)
       const today = new Date()
@@ -82,6 +85,7 @@ Component({
 
       this.setData({
         hasBirthDate,
+        wish,
         exceeded,
         ratioPercent: Math.min(ratio, 100),
         ratioText: `${ratio.toFixed(2)}%`,
@@ -96,6 +100,20 @@ Component({
     },
     goToSettings() {
       wx.navigateTo({ url: '/pages/settings/settings' })
+    },
+    onEditWish() {
+      wx.showModal({
+        title: '剩下的时间还想干点什么？',
+        editable: true,
+        placeholderText: '写下一句话，记下来',
+        content: this.data.wish,
+        success: (res) => {
+          if (!res.confirm) return
+          const wish = (res.content || '').trim()
+          wx.setStorageSync(WISH_KEY, wish)
+          this.setData({ wish })
+        },
+      })
     },
     onShareImage() {
       try {
@@ -223,6 +241,14 @@ Component({
             ctx.font = '26px sans-serif'
             ctx.textAlign = 'center'
             ctx.fillText('\u5269\u4E0B\u7684\u65F6\u95F4\u8FD8\u60F3\u5E72\u70B9\u4EC0\u4E48\uFF1F', W / 2, y)
+
+            // 心愿记录
+            if (this.data.wish) {
+              y += 44
+              ctx.fillStyle = '#576b95'
+              ctx.font = '28px sans-serif'
+              ctx.fillText(this.data.wish, W / 2, y)
+            }
 
             y += 42
             ctx.fillStyle = '#bbbbbb'
