@@ -1,20 +1,18 @@
 <navigation-bar title="我的yu生" back="{{false}}" color="black" background="#FFF"></navigation-bar>
 <view class="container">
-  <view class="settings-bar">
-    <view class="settings-tip" wx:if="{{!hasBirthDate}}">
-      <text>当前显示默认生日，</text>
-      <text class="link" bindtap="goToSettings">点击设置您的生日</text>
-    </view>
-    <view class="settings-btn" wx:if="{{hasBirthDate}}" bindtap="goToSettings">
-      <text class="link">修改生日</text>
-    </view>
-  </view>
   <view class="life-table">
     <view class="table-header">
-      <text class="header-cell">项目</text>
-      <text class="header-cell">数值</text>
+      <text class="hcell h-label">项目</text>
+      <text class="hcell h-value">数值</text>
     </view>
-    <view class="table-row" wx:for="{{items}}" wx:key="label">
+    <view class="table-row">
+      <text class="cell label-cell">出生</text>
+      <view class="cell value-cell birth-value {{isDefaultBirth ? 'default-birth' : ''}}">
+        <text>{{birthDate}}</text>
+        <text class="link birth-link" bindtap="goToSettings">修改</text>
+      </view>
+    </view>
+    <view class="table-row" wx:for="{{items}}" wx:key="label" wx:if="{{item.label !== '出生'}}">
       <text class="cell label-cell">{{item.label}}</text>
       <text class="cell value-cell {{item.highlight ? 'highlight' : ''}}">{{item.value}}</text>
     </view>

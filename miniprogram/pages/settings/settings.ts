@@ -27,6 +27,11 @@ Page({
     }
     wx.setStorageSync(BIRTH_DATE_KEY, birthDate)
     wx.showToast({ title: '保存成功', icon: 'success' })
+    // 通知首页刷新，避免返回时页面生命周期未触发导致修改不生效
+    const channel = this.getOpenerEventChannel?.()
+    if (channel && typeof channel.emit === 'function') {
+      channel.emit('birthDateChanged')
+    }
     setTimeout(() => {
       wx.navigateBack()
     }, 800)

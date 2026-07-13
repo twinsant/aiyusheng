@@ -45,7 +45,9 @@ function roundRect(ctx: WechatMiniprogram.CanvasRenderingContext2D, x: number, y
 Component({
   data: {
     items: [] as { label: string; value: string; highlight: boolean }[],
+    birthDate: '',
     hasBirthDate: false,
+    isDefaultBirth: false,
     wish: '',
     wishDate: '',
     ratioPercent: 0,
@@ -99,6 +101,8 @@ Component({
 
       this.setData({
         hasBirthDate,
+        isDefaultBirth: !hasBirthDate,
+        birthDate: formatDateCN(birthDate),
         wish,
         wishDate,
         exceeded,
@@ -108,13 +112,20 @@ Component({
           { label: '出生', value: formatDateCN(birthDate), highlight: false },
           { label: '今天', value: todayStr, highlight: false },
           { label: '已活', value: `${formatNumber(livedDays)} 天（${livedYears.toFixed(2)} 年）`, highlight: true },
-          { label: '人均预期', value: `${LIFE_EXPECTANCY_YEARS} 年（${formatNumber(LIFE_EXPECTANCY_DAYS)} 天）`, highlight: false },
+          { label: '预期', value: `${LIFE_EXPECTANCY_YEARS} 年（${formatNumber(LIFE_EXPECTANCY_DAYS)} 天）`, highlight: false },
           extraItem,
         ],
       })
     },
     goToSettings() {
-      wx.navigateTo({ url: '/pages/settings/settings' })
+      wx.navigateTo({
+        url: '/pages/settings/settings',
+        events: {
+          birthDateChanged: () => {
+            this.loadData()
+          },
+        },
+      })
     },
     onEditWish() {
       wx.showModal({
